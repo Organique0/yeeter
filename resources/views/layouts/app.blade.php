@@ -13,7 +13,6 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
     <!-- themes -->
-    <script src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"></script>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])

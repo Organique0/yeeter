@@ -37,11 +37,9 @@ $logout = function (Logout $logout) {
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
-                @persist('theme')
-                    <div class="sm:flex sm:items-center sm:me-2">
-                        <livewire:change-themes type="select" />
-                    </div>
-                @endpersist
+                <div class="sm:flex sm:items-center sm:me-2">
+                    <livewire:change-themes type="select" />
+                </div>
 
                 <x-mary-dropdown right>
                     <x-slot:trigger>
