@@ -5,22 +5,22 @@ namespace App\Livewire;
 use App\Models\Image;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Http\File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Mary\Traits\WithMediaSync;
 
 class NewPostForm extends Component
 {
-    use WithFileUploads, WithMediaSync;
+    use WithFileUploads;
 
-    #[Rule(['files.*' => 'image|max:1024'])]
-    public array $files = [];
-
-    #[Rule('required')]
-    public Collection $library;
+    #[Validate('image|max:1024')]
+    public $photo;
 
     #[Rule('required')]
     public string $message = "";
@@ -30,9 +30,6 @@ class NewPostForm extends Component
     public function mount(): void
     {
         $this->user = auth()->user();
-
-        // Load existing library metadata from your model
-        $this->library = $this->user->library ?? new Collection();
     }
 
     public function save(): void
@@ -43,20 +40,21 @@ class NewPostForm extends Component
             'message' => $this->message,
         ]);
 
-        foreach ($this->files as $image) {
-            $path = $image->store('images', 'public');
+        $path = $this->photo->storeAs(
+            'yeetImages/' . $post->id,
+            $this->photo->getClientOriginalName(),
+            's3'
+        );
 
-            Image::create([
-                'post_id' => $post->id,
-                'url' => $path,
-            ]);
-        }
+        $url = Storage::disk('s3')->url($path);
 
-        // Sync files and updates library metadata
-        $this->syncMedia($this->user);
+        Image::create([
+            'post_id' => $post->id,
+            'url' => $url,
+        ]);
 
         $this->dispatch('postCreated');
-        $this->reset(['message', 'files']);
+        $this->reset(['message', 'photo']);
     }
 
     public function render()

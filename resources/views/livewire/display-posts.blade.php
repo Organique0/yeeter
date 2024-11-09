@@ -13,7 +13,7 @@
                     @if ($post->images)
                         <div class="mt-2">
                             @foreach ($post->images as $image)
-                                <img src="{{ asset('storage/' . $image->url) }}" alt="Post Image" class="mt-2 w-72">
+                                <img src="{{ $image->url }}" alt="Post Image" class="mt-2 w-72">
                             @endforeach
                         </div>
                     @endif

@@ -3,8 +3,7 @@
     <x-mary-form wire:submit='save'>
         <x-mary-input label="message" wire:model="message" />
 
-        <x-mary-image-library wire:model="files" wire:library="library" :preview="$library" label="{{ __('Images') }}"
-            hint="{{ __('Max 100Kb') }}" />
+        <x-mary-file wire:model="photo" label="Post image" hint="Any image format" accept="image/" />
 
         <x-mary-button type="submit">{{ __('Submit') }}</x-mary-button>
     </x-mary-form>
