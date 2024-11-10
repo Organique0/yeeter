@@ -11,7 +11,11 @@ export default {
     ],
 
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                sans: ["anta", ...defaultTheme.fontFamily.sans],
+            },
+        },
     },
 
     daisyui: {

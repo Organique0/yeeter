@@ -40,9 +40,12 @@ $login = function () {
         </div>
 
         <!-- Remember Me -->
-        <div class="block mt-4">
+        <div class="flex justify-between mt-4">
             <x-mary-checkbox label="{{ __('Remember me') }}" wire:model="form.remember" id="remember"
                 name="remember" />
+            <a class="underline text-sm " href="{{ route('register') }}" wire:navigate>
+                {{ __('Register') }}
+            </a>
         </div>
 
         <div class="flex items-center justify-end mt-4">
