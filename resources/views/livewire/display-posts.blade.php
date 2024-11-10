@@ -9,16 +9,11 @@
 
                     </br>
 
+                    <p>
+                        <!-- we need this function, otherwise it does not render new line characters-->
+                        {!! nl2br(e($post->message)) !!}
+                    </p>
 
-                    <h3 class="font-semibold text-lg">asdčflkhasdfčasf
-                        asdfasdfčasdf
-                        asdfljasčdfasd
-                        fassdfčasjfas
-                        dfaskdfas
-                        dfasjiodfasdf
-                        đšasfkjasdf
-
-                    </h3>
                     @if ($post->images)
                         <div class="mt-2">
                             @foreach ($post->images as $image)

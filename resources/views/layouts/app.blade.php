@@ -26,6 +26,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src={{ asset('js/theme.js') }}></script>
+    @stack('scripts')
 
 </head>
 
@@ -47,6 +48,7 @@
             {{ $slot }}
         </main>
     </div>
+
 </body>
 
 </html>

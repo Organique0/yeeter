@@ -1,17 +1,20 @@
 <div class="mx-auto p-6 border-x border-neutral">
     <h1 class="text-2xl font-semibold text-inherit mb-4">{{ __('Create a new post') }}</h1>
-    <x-mary-form wire:submit.prevent='save' class="space-y-4">
+    <x-mary-form id="new-post-form" class="space-y-4">
 
         <div class="flex items-start space-x-4">
             <div class="flex-1">
-                <div class="cursor-text p-1 focus:outline-none h-12" role="textbox" contenteditable spellcheck>
-                    @if ($photo)
-                        <div class="mt-4">
-                            <img src="{{ $photo->temporaryUrl() }}" alt="Image Preview"
-                                class="mt-2 h-40 rounded-lg shadow-md">
-                        </div>
-                    @endif
+                <div id="message" class="cursor-text p-1 focus:outline-none" role="textbox" contenteditable spellcheck
+                    wire:ignore.self>
                 </div>
+                @if ($photo)
+                    <div class="mt-4">
+                        <img src="{{ $photo->temporaryUrl() }}" alt="Image Preview"
+                            class="mt-2 h-40 rounded-lg shadow-md">
+                    </div>
+                @endif
+
+                <div>{{ $message }}</div>
                 @error('message')
                     <span class="text-sm text-error">{{ $message }}</span>
                 @enderror
@@ -33,3 +36,29 @@
         </div>
     </x-mary-form>
 </div>
+
+{{--
+we need to make a custom form submit because for some reason setting
+the value of a textarea with javascript doesn't work with livewire.
+I don't know how to make it detect that the value of a textarea has changed programatically.
+If I enter the data in it manually, it works fine.
+--}}
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:navigated', function() {
+            const messageDiv = document.getElementById('message');
+            const form = document.getElementById('new-post-form');
+
+            if (messageDiv && form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    let messageContent = messageDiv.innerText.trim();
+
+                    @this.set('message', messageContent);
+                    @this.call('save');
+                });
+            }
+        });
+    </script>
+@endpush

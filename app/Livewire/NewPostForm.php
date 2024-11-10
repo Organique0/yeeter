@@ -40,6 +40,12 @@ class NewPostForm extends Component
             'message' => $this->message,
         ]);
 
+        if ($this->photo === null) {
+            $this->dispatch('postCreated');
+            $this->reset(['message', 'photo']);
+            return;
+        }
+
         $path = $this->photo->storeAs(
             'yeetImages/' . $post->id,
             $this->photo->getClientOriginalName(),
