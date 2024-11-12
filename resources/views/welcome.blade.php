@@ -35,17 +35,20 @@
         <livewire:change-themes type="drawer" />
     </div>
 
-    <div class="text-center">
-        <div class="h-[50%] flex justify-center items-center mt-44">
-            <x-application-logo-text />
-
+    <div class="text-center h-[calc(100vh-3.5rem)]">
+        <div class="flex justify-center items-center h-[60%]">
+            <div class="w-[60%] md:w-[70%] lg:w-[80%] flex justify-center items-center stroke-inherit">
+                <x-application-logo-text />
+            </div>
         </div>
-        <h1 class="text-9xl">Yeeter</h1>
+        <div class="h-[30%] flex flex-col items-center justify-center">
+            <h1 class="text-7xl md:text-8xl lg:text-9xl">Yeeter</h1>
 
-        <div>
-            <x-mary-button label="Yeet something on the internet"
-                class="bg-transparent outline outline-secondary text-secondary text-xl font-light mt-9 hover:bg-transparent hover:scale-110 hover:ring-4 hover:ring-secondary transtition-all"
-                link="/home" />
+            <div>
+                <x-mary-button label="Yeet something on the internet"
+                    class="bg-transparent outline outline-secondary text-secondary text-lg md:text-xl lg:text-2xl font-light mt-9 hover:bg-transparent hover:scale-110 hover:ring-4 hover:ring-secondary transtition-all"
+                    link="/home" />
+            </div>
         </div>
     </div>
 </body>
