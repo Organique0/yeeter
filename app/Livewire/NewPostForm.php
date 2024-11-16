@@ -4,16 +4,12 @@ namespace App\Livewire;
 
 use App\Models\Image;
 use App\Models\Post;
-use App\Models\User;
-use Illuminate\Http\File;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use Livewire\Attributes\Rule;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Mary\Traits\WithMediaSync;
 
 class NewPostForm extends Component
 {
@@ -25,11 +21,9 @@ class NewPostForm extends Component
     #[Rule('required')]
     public string $message = "";
 
-    public User $user;
-
     public function mount(): void
     {
-        $this->user = auth()->user();
+
     }
 
     public function save(): void
@@ -63,7 +57,7 @@ class NewPostForm extends Component
         $this->reset(['message', 'photo']);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.new-post-form');
     }
