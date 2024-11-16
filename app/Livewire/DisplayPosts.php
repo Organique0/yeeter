@@ -20,7 +20,7 @@ class DisplayPosts extends Component
     #[On('postCreated')]
     public function refreshPosts(): void
     {
-        $this->posts = Post::with(['images', 'user'])->orderByDesc('created_at')->get();
+        $this->posts = Post::with(['files', 'user'])->orderByDesc('created_at')->get();
     }
 
 

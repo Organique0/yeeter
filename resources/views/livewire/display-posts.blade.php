@@ -14,10 +14,19 @@
                         {!! nl2br(e($post->message)) !!}
                     </p>
 
-                    @if ($post->images)
+                    @if ($post->files)
                         <div class="mt-2">
-                            @foreach ($post->images as $image)
-                                <img src="{{ $image->url }}" alt="Post Image" class="mt-2 w-72">
+                            <!--
+                                // here we get the data from the database, where the type is store on each file
+                                // just to make it easier to decide how to display them
+                            -->
+                            @foreach ($post->files as $file)
+                                @if ($file->type == 'image')
+                                    <img src="{{ $file->url }}" alt="image" class="w-1/4">
+                                @endif
+                                @if ($file->type == 'video')
+                                    <video src="{{ $file->url }}" controls class="w-1/4"></video>
+                                @endif
                             @endforeach
                         </div>
                     @endif

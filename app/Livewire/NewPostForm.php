@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\Image;
+use Illuminate\Support\Str;
 use App\Models\Post;
+use App\Models\File as FileModel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Livewire\Attributes\Rule;
@@ -15,46 +17,52 @@ class NewPostForm extends Component
 {
     use WithFileUploads;
 
-    #[Validate('image|max:1024')]
-    public $photo;
+    #[Rule(['files.*' => 'mimes:jpg,jpeg,png,gif,webp,mp4,mov,avi|max:10240'])]
+    public array $files = [];
 
     #[Rule('required')]
     public string $message = "";
 
-    public function mount(): void
-    {
-
-    }
+    public function mount(): void {}
 
     public function save(): void
     {
+        $this->validate();
 
         $post = Post::create([
             'user_id' => auth()->id(),
             'message' => $this->message,
         ]);
 
-        if ($this->photo === null) {
+        if ($this->files === null) {
             $this->dispatch('postCreated');
-            $this->reset(['message', 'photo']);
+            $this->reset(['message', 'files']);
             return;
         }
 
-        $path = $this->photo->storeAs(
-            'yeetImages/' . $post->id,
-            $this->photo->getClientOriginalName(),
-            's3'
-        );
+        foreach ($this->files as $file) {
+            $mimeType = $file->getMimeType();
+            $type = Str::startsWith($mimeType, 'image') ? 'image' : 'video';
 
-        $url = Storage::disk('s3')->url($path);
+            $path = $file->storeAs(
+                'yeetImages/' . $post->id,
+                $file->getClientOriginalName(),
+                's3'
+            );
 
-        Image::create([
-            'post_id' => $post->id,
-            'url' => $url,
-        ]);
+            $url = Storage::disk('s3')->url($path);
+
+            FileModel::create([
+                'post_id' => $post->id,
+                'url' => $url,
+                'type' => $type,
+            ]);
+        }
+
+
 
         $this->dispatch('postCreated');
-        $this->reset(['message', 'photo']);
+        $this->reset(['message', 'files']);
     }
 
     public function render(): View
