@@ -11,6 +11,7 @@ class DisplayPosts extends Component
 {
     protected $listeners = ['postCreated' => '$refreshPosts'];
     public $posts;
+    public $post_links = [];
 
     public function mount(): void
     {

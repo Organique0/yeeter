@@ -48,19 +48,18 @@ class NewPostForm extends Component
             //now, you upload the images locally when you are developing
             //and when you are in production, you upload them to s3
             if ($environment == 'local') {
-                foreach ($this->files as $file) {
-                    if ($type === "image") {
-                        $path = $file->store('images', 'public');
-                    } else {
-                        $path = $file->store('videos', 'public');
-                    }
 
-                    FileModel::create([
-                        "post_id" => $post->id,
-                        "url" => $path,
-                        "type" => $type,
-                    ]);
+                if ($type === "image") {
+                    $path = $file->store('images', 'public');
+                } else {
+                    $path = $file->store('videos', 'public');
                 }
+
+                FileModel::create([
+                    "post_id" => $post->id,
+                    "url" => $path,
+                    "type" => $type,
+                ]);
             } else {
                 //če je navadna slika, potem jo samo shrani v yeetMedia datoteko
                 //yeetMedia je mapa v s3 bucketu

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.carousel-items {
+}
+.pswp__icn {
+    @apply fill-primary;
+}
