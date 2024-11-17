@@ -23,6 +23,8 @@ class NewPostForm extends Component
     #[Rule('required')]
     public string $message = "";
 
+    public string $videoUrl = "";
+
     public function mount(): void {}
 
     public function save(): void
@@ -45,7 +47,7 @@ class NewPostForm extends Component
             $type = Str::startsWith($mimeType, 'image') ? 'image' : 'video';
 
             $path = $file->storeAs(
-                'yeetImages/' . $post->id,
+                'upload-original/' . $post->id,
                 $file->getClientOriginalName(),
                 's3'
             );
@@ -57,12 +59,41 @@ class NewPostForm extends Component
                 'url' => $url,
                 'type' => $type,
             ]);
+
+            $this->dispatch('postCreated');
+
+
+            if ($type === 'video') {
+                // Wait for the Lambda function to process the video
+                // Display the video immediately
+                $this->videoUrl = $url;
+
+                // Trigger the Lambda function to compress the video
+                $this->dispatch('video-uploaded', ['path' => $path, 'postId' => $post->id]);
+
+                // Poll for the compressed video URL
+                $compressed = $this->pollForCompressedVideo($path, $post->id);
+
+                $fileModel = FileModel::where('post_id', $post->id)->where('url', $url)->first();
+                $fileModel->update([
+                    'url' => $compressed,
+                ]);
+            }
+
+            $this->reset(['message', 'files']);
         }
+    }
 
+    private function pollForCompressedVideo(string $path, int $postId): string
+    {
+        // Poll S3 to check if the compressed video is available
+        $compressedKey = 'yeetMedia/' . $postId . '/' . basename($path);
+        $s3 = Storage::disk('s3');
 
-
-        $this->dispatch('postCreated');
-        $this->reset(['message', 'files']);
+        while (!$s3->exists($compressedKey)) {
+            sleep(5); // Wait for 5 seconds before checking again
+        }
+        return $s3->url($compressedKey);
     }
 
     public function render(): View
