@@ -23,7 +23,6 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <script src={{ asset('js/theme.js') }}></script>
     @stack('scripts')
 
 </head>
@@ -42,7 +41,7 @@
         @endif
 
         <!-- Page Content -->
-        <main class="max-w-5xl mx-auto">
+        <main class="max-w-5xl mx-auto grid-cols-1">
             {{ $slot }}
         </main>
     </div>

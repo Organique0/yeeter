@@ -1,11 +1,11 @@
-<div class="mx-auto p-6 border-x border-neutral">
+<div class="mx-auto p-6 shadow-md shadow-primary rounded-lg mt-[4rem]">
     <h1 class="text-2xl font-semibold text-inherit mb-4">{{ __('Create a new post') }}</h1>
     <x-mary-form id="new-post-form" class="space-y-4">
 
         <div class="flex items-start space-x-4">
             <div class="flex-1">
-                <div id="message" class="cursor-text p-1 focus:outline-none" role="textbox" contenteditable spellcheck
-                    wire:ignore.self>
+                <div id="message" class="cursor-text p-1 focus:outline-none min-h-11 text-sm opacity-90" role="textbox"
+                    contenteditable spellcheck wire:ignore.self>
                 </div>
                 @if ($files)
                     <div class="mt-4">
@@ -73,6 +73,16 @@ If I enter the data in it manually, it works fine.
                     call('save');
                 });
             }
+
+            const placeholderMessage = "Enter a message"
+
+            messageDiv.innerText = placeholderMessage;
+            messageDiv.addEventListener('focus', function(event) {
+                messageDiv.innerText = "";
+            })
+            messageDiv.addEventListener('blur', function(event) {
+                messageDiv.innerText = placeholderMessage;
+            })
         });
     </script>
 @endpush
