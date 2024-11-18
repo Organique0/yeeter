@@ -51,16 +51,54 @@
                                     }
                                 }">
                                     <div id="gallery-{{ $uuid }}">
-                                        <div class="flex gap-4 flex-wrap">
-                                            @foreach ($post_links as $link)
-                                                <a href="{{ $link }}" target="_blank" data-pswp-width="100"
-                                                    data-pswp-height="100" class="block relative">
-                                                    <img src="{{ $link }}"
-                                                        class="h-48 w-48 object-cover rounded-lg"
-                                                        onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
-                                                </a>
-                                            @endforeach
-                                        </div>
+                                        @if (count($post_links) == 1)
+                                            <div class="grid grid-cols-1 gap-8">
+                                                @foreach ($post_links as $link)
+                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
+                                                        data-pswp-height="100" class="block relative">
+                                                        <img src="{{ $link }}"
+                                                            class="h-full object-cover rounded-lg"
+                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if (count($post_links) == 2)
+                                            <div class="grid grid-cols-2 gap-8">
+                                                @foreach ($post_links as $link)
+                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
+                                                        data-pswp-height="100" class="block relative">
+                                                        <img src="{{ $link }}"
+                                                            class="h-full object-cover rounded-lg"
+                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if (count($post_links) == 3)
+                                            <div class="grid grid-cols-3 gap-8">
+                                                @foreach ($post_links as $link)
+                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
+                                                        data-pswp-height="100" class="block relative">
+                                                        <img src="{{ $link }}"
+                                                            class="h-full object-cover rounded-lg"
+                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
+                                        @if (count($post_links) >= 4)
+                                            <div class="grid grid-cols-4 gap-8">
+                                                @foreach ($post_links as $link)
+                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
+                                                        data-pswp-height="100" class="block relative">
+                                                        <img src="{{ $link }}"
+                                                            class="h-full object-cover rounded-lg"
+                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
+                                                    </a>
+                                                @endforeach
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
                             @endif
