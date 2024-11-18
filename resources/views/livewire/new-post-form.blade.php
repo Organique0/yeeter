@@ -4,8 +4,9 @@
 
         <div class="flex items-start space-x-4">
             <div class="flex-1">
-                <div id="message" class="cursor-text p-1 focus:outline-none min-h-11 text-sm opacity-90" role="textbox"
-                    contenteditable spellcheck wire:ignore.self>
+                <div id="message"
+                    class="cursor-text p-1 focus:outline-none min-h-11 text-sm opacity-90  empty:before:content-['Input\0020your\0020message\0020here']"
+                    role="textbox" contenteditable spellcheck wire:ignore.self>
                 </div>
                 @if ($files)
                     <div class="mt-4">
@@ -57,6 +58,9 @@ If I enter the data in it manually, it works fine.
     <script>
         document.addEventListener('livewire:navigated', function() {
             const messageDiv = document.getElementById('message');
+            //we add this to make tailwind empty: work
+            messageDiv.innerText = "";
+
             const form = document.getElementById('new-post-form');
 
             if (messageDiv && form) {
@@ -74,15 +78,16 @@ If I enter the data in it manually, it works fine.
                 });
             }
 
-            const placeholderMessage = "Enter a message"
-
-            messageDiv.innerText = placeholderMessage;
-            messageDiv.addEventListener('focus', function(event) {
-                messageDiv.innerText = "";
-            })
+            //when you click ouside the div and there is no text inputed, set it to empty string
+            //this is because the browser randomly adds some content in a contenteditable div
+            //and this hidden things stay in the div and so breaking the empty: property
             messageDiv.addEventListener('blur', function(event) {
-                messageDiv.innerText = placeholderMessage;
+                if (message.innerText.trim() === '') {
+                    messageDiv.innerText = "";
+                }
             })
+
+
         });
     </script>
 @endpush
