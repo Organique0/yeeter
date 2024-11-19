@@ -129,6 +129,11 @@ class NewPostForm extends Component
         $this->reset(["message", "files"]);
     }
 
+    public function delete($id)
+    {
+        array_splice($this->files, $id);
+    }
+
     public function render(): View
     {
         return view("livewire.new-post-form");
