@@ -13,46 +13,27 @@
                     <!--
                             // the file is not store in the database yet, so we cannot just see the type from there
                             // we need to go through the files that are stored in a temporary folder and check the type of each one
+
+                            //snap-x is horizontal snapping
+                            //snap-mandatory is a type of snapping
                         }}-->
-                    @if (count($files) == 1)
-                        <div class="grid grid-cols-1 gap-8">
-                            @foreach ($files as $file)
-                                <div class="relative inline-block">
-                                    <div class="relative inline-block">
-                                        @if (Str::startsWith($file->getMimeType(), 'image'))
-                                            <img src="{{ $file->temporaryUrl() }}"
-                                                class="h-full object-contain rounded-lg" />
-                                        @endif
-                                        @if (Str::startsWith($file->getMimeType(), 'video'))
-                                            <video src="{{ $file->temporaryUrl() }}" controls
-                                                class="h-full object-contain rounded-lg"></video>
-                                        @endif
+                    <div class="flex overflow-x-auto gap-8 snap-x snap-mandatory">
+                        @foreach ($files as $id => $file)
+                            <div class="relative flex-shrink-0 snap-center">
+                                @if (Str::startsWith($file->getMimeType(), 'image'))
+                                    <img src="{{ $file->temporaryUrl() }}"
+                                        class="object-cover rounded-lg aspect-square w-64 h-64" />
+                                @endif
+                                @if (Str::startsWith($file->getMimeType(), 'video'))
+                                    <video src="{{ $file->temporaryUrl() }}" controls
+                                        class="object-cover rounded-lg aspect-square w-64 h-64"></video>
+                                @endif
 
-                                        <x-mary-button icon="o-user" class="btn-circle absolute top-2 right-2" />
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @else
-                        <div class="grid grid-cols-2 gap-8">
-                            @foreach ($files as $file)
-                                <div class="relative inline-block">
-                                    <div class="relative inline-block">
-                                        @if (Str::startsWith($file->getMimeType(), 'image'))
-                                            <img src="{{ $file->temporaryUrl() }}"
-                                                class="h-full object-contain rounded-lg" />
-                                        @endif
-                                        @if (Str::startsWith($file->getMimeType(), 'video'))
-                                            <video src="{{ $file->temporaryUrl() }}" controls
-                                                class="h-full object-contain rounded-lg"></video>
-                                        @endif
-
-                                        <x-mary-button icon="o-user" class="btn-circle absolute top-2 right-2" />
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    @endif
+                                <x-mary-button icon="o-x-mark" class="btn-circle absolute top-2 right-2"
+                                    wire:click="delete({{ $id }})" />
+                            </div>
+                        @endforeach
+                    </div>
                 @endif
 
                 <div>{{ $message }}</div>
@@ -64,8 +45,6 @@
 
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                {{--  <input type="file" id="photo" wire:model="photo" accept="image/*"
-                    class="block text-sm text-inherit file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold "> --}}
                 <x-mary-file wire:model="files" label="Upload an image or video" />
                 @error('photo')
                     <span class="text-sm text-error">{{ $message }}</span>
