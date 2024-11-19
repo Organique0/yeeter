@@ -60,8 +60,8 @@ $logout = function (Logout $logout) {
                     </x-slot:trigger>
 
 
-                    <x-mary-menu-item :link="route('profile')" wire:navigate>
-                        {{ __('Profile') }}
+                    <x-mary-menu-item :link="route('settings')" wire:navigate>
+                        {{ __('settings') }}
                     </x-mary-menu-item>
 
                     <!-- Authentication -->
