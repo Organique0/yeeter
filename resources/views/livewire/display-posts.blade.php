@@ -3,105 +3,75 @@
         <div class="mt-[4rem]">
             @foreach ($posts as $post)
                 @php
-                    $post_links = [];
                     $uuid = Str::uuid();
+                    $numFiles = count($post->files);
                 @endphp
-                <div class="mb-8 p-8 shadow-md shadow-secondary rounded-lg "> <!-- Add margin to separate posts -->
-                    <p class="text-sm text-base-content float-end">
-                        Posted by {{ $post->user->name }} on
-                        {{ $post->created_at->setTimezone('Europe/Ljubljana')->format('M d, Y - H:i A') }}
-                    </p>
+                <div class="mb-8 p-8 shadow-md shadow-secondary rounded-lg">
+                    <div class="flex items-center">
+                        <p class="font-extrabold">
+                            {{ $post->user->name }}
+                        </p>
+                        <div class="px-1 text-2xl font-extrabold">·</div>
+                        <p class="font-extralight">
+                            {{ $post->created_at->setTimezone('Europe/Ljubljana')->diffForHumans() }}
+                        </p>
+                    </div>
 
-                    <br> <!-- Corrected </br> to <br> -->
-
-                    <p class=" my-6 px-3 py-6">
-                        <!-- Render new line characters -->
+                    <p class="mb-6">
                         {!! nl2br(e($post->message)) !!}
                     </p>
 
                     @if ($post->files)
                         <div class="mt-2">
-                            @foreach ($post->files as $file)
-                                @if ($file->type == 'image')
-                                    @php
-                                        $post_links[] = asset('storage/' . $file->url);
-                                    @endphp
-                                @elseif ($file->type == 'video')
-                                    @if (explode('/', $file->url)[0] == 'videos')
-                                        <video src="{{ asset('storage/' . $file->url) }}" controls class="w-1/4"></video>
-                                    @else
-                                        <video src="{{ $file->url }}" controls class="w-1/4"></video>
-                                    @endif
-                                @endif
-                            @endforeach
+                            <div x-data="{
+                                init() {
+                                    const lightbox = new PhotoSwipeLightbox({
+                                        gallery: '#gallery-{{ $uuid }}',
+                                        children: 'a',
+                                        showHideAnimationType: 'fade',
+                                        imageClickAction: 'next',
+                                        tabAction: 'next',
+                                        pswpModule: PhotoSwipe,
+                                        mainClass: 'pswp--custom-icon-colors',
+                                    });
+                                    lightbox.init();
+                                }
+                            }">
+                                <div id="gallery-{{ $uuid }}" class="flex flex-wrap gap-2">
+                                    @foreach ($post->files as $file)
+                                        @if ($file->type == 'image')
+                                            @php
+                                                // $numFiles % 2 == 1 && $loop->last ? 'w-full' : 'w-1/2'
+                                                // ok, it finally works the way I wanted it to
+                                                // če je zadnji vpis v post files potem gre čez 2 stolpca.
+                                                // ampak to upošteva samo, če je liho število vnosov
+                                                // drugače bi, če imamo 2 zapisa, dal enega čez pol vrstice in drugega v celotno drugo vrstico
+                                                // če je samo en zapis se ravno prav izzide, ker je liho in zadnji vnos
 
-                            @if ($post_links)
-                                <div x-data="{
-                                    init() {
-                                        const lightbox = new PhotoSwipeLightbox({
-                                            gallery: '#gallery-{{ $uuid }}',
-                                            children: 'a',
-                                            showHideAnimationType: 'fade',
-                                            imageClickAction: 'next',
-                                            tabAction: 'next',
-                                            pswpModule: PhotoSwipe,
-                                            mainClass: 'pswp--custom-icon-colors',
-                                        });
-                                        lightbox.init();
-                                    }
-                                }">
-                                    <div id="gallery-{{ $uuid }}">
-                                        @if (count($post_links) == 1)
-                                            <div class="grid grid-cols-1 gap-8">
-                                                @foreach ($post_links as $link)
-                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
-                                                        data-pswp-height="100" class="block relative">
-                                                        <img src="{{ $link }}"
-                                                            class="h-full object-cover rounded-lg"
-                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
-                                                    </a>
-                                                @endforeach
-                                            </div>
+                                                // w-[calc(50%-0.25rem)]
+                                                // I don't know how to do this properly, so I always just do it like this
+// when using columns it's fine, but with flex wrap
+                                                // when you have 2 50% items, it takes more space than 100%
+                                                // So I just substract the gap from the width
+                                            @endphp
+                                            <a href="{{ asset('storage/' . $file->url) }}" target="_blank"
+                                                data-pswp-width="100" data-pswp-height="100"
+                                                class="relative flex items-center justify-center align-middle {{ $numFiles % 2 == 1 && $loop->last ? 'w-full' : 'w-[calc(50%-0.25rem)]' }}">
+                                                <img src="{{ asset('storage/' . $file->url) }}"
+                                                    class="object-cover rounded-lg aspect-video"
+                                                    onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
+                                            </a>
+                                        @elseif ($file->type == 'video')
+                                            <a href="{{ asset('storage/' . $file->url) }}" target="_blank"
+                                                data-pswp-width="100" data-pswp-height="100"
+                                                class="relative flex items-center justify-center align-middle {{ $numFiles % 2 == 1 && $loop->last ? 'w-full' : 'w-[calc(50%-0.25rem)]' }}">
+                                                <video src="{{ asset('storage/' . $file->url) }}" controls
+                                                    class="object-cover rounded-lg"></video>
+                                            </a>
                                         @endif
-                                        @if (count($post_links) == 2)
-                                            <div class="grid grid-cols-2 gap-8">
-                                                @foreach ($post_links as $link)
-                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
-                                                        data-pswp-height="100" class="block relative">
-                                                        <img src="{{ $link }}"
-                                                            class="h-full object-cover rounded-lg"
-                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
-                                                    </a>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                        @if (count($post_links) == 3)
-                                            <div class="grid grid-cols-3 gap-8">
-                                                @foreach ($post_links as $link)
-                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
-                                                        data-pswp-height="100" class="block relative">
-                                                        <img src="{{ $link }}"
-                                                            class="h-full object-cover rounded-lg"
-                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
-                                                    </a>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                        @if (count($post_links) >= 4)
-                                            <div class="grid grid-cols-4 gap-8">
-                                                @foreach ($post_links as $link)
-                                                    <a href="{{ $link }}" target="_blank" data-pswp-width="100"
-                                                        data-pswp-height="100" class="block relative">
-                                                        <img src="{{ $link }}"
-                                                            class="h-full object-cover rounded-lg"
-                                                            onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
-                                                    </a>
-                                                @endforeach
-                                            </div>
-                                        @endif
-                                    </div>
+                                    @endforeach
                                 </div>
-                            @endif
+                            </div>
                         </div>
                     @endif
                 </div>

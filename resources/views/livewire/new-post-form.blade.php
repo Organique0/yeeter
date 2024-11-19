@@ -1,28 +1,58 @@
-<div class="mx-auto p-6 shadow-md shadow-primary rounded-lg mt-[4rem]">
-    <h1 class="text-2xl font-semibold text-inherit mb-4">{{ __('Create a new post') }}</h1>
+<div class="mx-auto p-6 shadow-md shadow-primary rounded-lg mt-[4rem] relative">
     <x-mary-form id="new-post-form" class="space-y-4">
 
         <div class="flex items-start space-x-4">
             <div class="flex-1">
+                <!-- editable div element. without the wire:ignore it resets the message after uploading a file-->
                 <div id="message"
-                    class="cursor-text p-1 focus:outline-none min-h-11 text-sm opacity-90  empty:before:content-['Input\0020your\0020message\0020here']"
-                    role="textbox" contenteditable spellcheck wire:ignore.self>
+                    class="cursor-text p-1 focus:outline-none min-h-11 empty:before:opacity-35 font-extrabold text-lg  empty:before:content-['Input\0020your\0020message\0020here']"
+                    role="textbox" contenteditable spellcheck wire:ignore>
                 </div>
+
                 @if ($files)
-                    <div class="mt-4">
-                        <!--
+                    <!--
                             // the file is not store in the database yet, so we cannot just see the type from there
                             // we need to go through the files that are stored in a temporary folder and check the type of each one
                         }}-->
-                        @foreach ($files as $file)
-                            @if (Str::startsWith($file->getMimeType(), 'image'))
-                                <img src="{{ $file->temporaryUrl() }}" alt="image" class="w-1/4">
-                            @endif
-                            @if (Str::startsWith($file->getMimeType(), 'video'))
-                                <video src="{{ $file->temporaryUrl() }}" controls class="w-1/4"></video>
-                            @endif
-                        @endforeach
-                    </div>
+                    @if (count($files) == 1)
+                        <div class="grid grid-cols-1 gap-8">
+                            @foreach ($files as $file)
+                                <div class="relative inline-block">
+                                    <div class="relative inline-block">
+                                        @if (Str::startsWith($file->getMimeType(), 'image'))
+                                            <img src="{{ $file->temporaryUrl() }}"
+                                                class="h-full object-contain rounded-lg" />
+                                        @endif
+                                        @if (Str::startsWith($file->getMimeType(), 'video'))
+                                            <video src="{{ $file->temporaryUrl() }}" controls
+                                                class="h-full object-contain rounded-lg"></video>
+                                        @endif
+
+                                        <x-mary-button icon="o-user" class="btn-circle absolute top-2 right-2" />
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="grid grid-cols-2 gap-8">
+                            @foreach ($files as $file)
+                                <div class="relative inline-block">
+                                    <div class="relative inline-block">
+                                        @if (Str::startsWith($file->getMimeType(), 'image'))
+                                            <img src="{{ $file->temporaryUrl() }}"
+                                                class="h-full object-contain rounded-lg" />
+                                        @endif
+                                        @if (Str::startsWith($file->getMimeType(), 'video'))
+                                            <video src="{{ $file->temporaryUrl() }}" controls
+                                                class="h-full object-contain rounded-lg"></video>
+                                        @endif
+
+                                        <x-mary-button icon="o-user" class="btn-circle absolute top-2 right-2" />
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
                 @endif
 
                 <div>{{ $message }}</div>
@@ -86,7 +116,6 @@ If I enter the data in it manually, it works fine.
                     messageDiv.innerText = "";
                 }
             })
-
 
         });
     </script>
