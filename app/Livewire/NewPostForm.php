@@ -22,10 +22,17 @@ class NewPostForm extends Component
 
     #[Rule("required")]
     public string $message = "";
+    public mixed $fileSystemDisk;
+
+    //env, ki določi kam se shranijo datoteke
+    //mora biti tukaj ali v save(). Ampak tukaj se zdi lepše
+    public function __construct()
+    {
+        $this->fileSystemDisk = env('FILESYSTEM_DISK');
+    }
 
     public function save(): void
     {
-        $environment = App::environment();
         $this->validate();
 
         $post = Post::create([
@@ -47,7 +54,7 @@ class NewPostForm extends Component
             //yes, I just love to waste as much time as possible
             //now, you upload the images locally when you are developing
             //and when you are in production, you upload them to s3
-            if ($environment == 'local') {
+            if ($this->fileSystemDisk == 'public') {
 
                 if ($type === "image") {
                     $path = $file->store('images', 'public');
@@ -60,7 +67,7 @@ class NewPostForm extends Component
                     "url" => $path,
                     "type" => $type,
                 ]);
-            } else {
+            } else if ($this->fileSystemDisk == 's3') {
                 //če je navadna slika, potem jo samo shrani v yeetMedia datoteko
                 //yeetMedia je mapa v s3 bucketu
                 //id posta je pod-mapa v katero se shranjijo slike in videi
