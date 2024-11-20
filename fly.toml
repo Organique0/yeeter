@@ -29,7 +29,7 @@ console_command = 'php /var/www/html/artisan tinker'
 
 [processes]
     app = ""
-    worker = "php artisan queue:work"
+    worker = "php artisan queue:work --stop-when-empty"
 
 [[vm]]
   size = 'shared-cpu-1x'
