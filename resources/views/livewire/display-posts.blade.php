@@ -65,16 +65,17 @@
                                             <a href="{{ asset('storage/' . $file->url) }}" target="_blank"
                                                 data-pswp-width="100" data-pswp-height="100"
                                                 class="relative flex items-center justify-center align-middle {{ $numFiles % 2 == 1 && $loop->last ? 'w-full' : 'w-[calc(50%-0.25rem)]' }}">
-                                                <img src="{{ asset('storage/' . $file->url) }}"
+                                                <img src="{{ env('FILESYSTEM_DISK') == 'public' ? asset('storage/' . $file->url) : $file->url }}"
                                                     class="object-cover rounded-lg aspect-video"
                                                     onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
                                             </a>
                                         @elseif ($file->type == 'video')
-                                            <a href="{{ asset('storage/' . $file->url) }}" target="_blank"
-                                                data-pswp-width="100" data-pswp-height="100"
+                                            <a href="{{ env('FILESYSTEM_DISK') == 'public' ? asset('storage/' . $file->url) : $file->url }}"
+                                                target="_blank" data-pswp-width="100" data-pswp-height="100"
                                                 class="relative flex items-center justify-center align-middle {{ $numFiles % 2 == 1 && $loop->last ? 'w-full' : 'w-[calc(50%-0.25rem)]' }}">
-                                                <video src="{{ asset('storage/' . $file->url) }}" controls
-                                                    class="object-cover rounded-lg"></video>
+                                                <video
+                                                    src="{{ env('FILESYSTEM_DISK') == 'public' ? asset('storage/' . $file->url) : $file->url }}"
+                                                    controls class="object-cover rounded-lg"></video>
                                             </a>
                                         @endif
                                     @endforeach

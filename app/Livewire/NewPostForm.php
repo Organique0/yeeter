@@ -100,7 +100,11 @@ class NewPostForm extends Component
                         "s3"
                     );
 
+
                     $url = Storage::disk("s3")->url($path);
+                    // hmmm, ne uporabi novega naslova, zato mu ga pač ročno spremenimo.
+                    // zdi se dobra ideja
+                    str_replace('upload-original', 'yeetMedia', $path);
 
                     $fileModel = FileModel::create([
                         "post_id" => $post->id,

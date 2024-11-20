@@ -17,6 +17,7 @@ console_command = 'php /var/www/html/artisan tinker'
   LOG_CHANNEL = 'stderr'
   LOG_LEVEL = 'info'
   LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
+  FILESYSTEM_DISK = 's3'
 
 [http_service]
   internal_port = 8080
