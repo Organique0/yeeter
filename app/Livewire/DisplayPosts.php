@@ -5,11 +5,11 @@ namespace App\Livewire;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 
 class DisplayPosts extends Component
 {
-    protected $listeners = ['postCreated' => '$refreshPosts'];
     public $posts;
     public $post_links = [];
 
@@ -27,12 +27,7 @@ class DisplayPosts extends Component
 
     public function deletePost($id)
     {
-        $post = Post::find($id);
-
-        if ($post && $post->user_id === auth()->id()) {
-            $post->delete();
-        }
-
+        deletePostDirectory($id);
         $this->refreshPosts();
     }
 
