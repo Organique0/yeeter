@@ -104,7 +104,7 @@ class NewPostForm extends Component
                     $url = Storage::disk("s3")->url($path);
                     // hmmm, ne uporabi novega naslova, zato mu ga pač ročno spremenimo.
                     // zdi se dobra ideja
-                    $url = str_replace('upload-original', 'yeetMedia', $url);
+                    //$url = str_replace('upload-original', 'yeetMedia', $url);
 
                     $fileModel = FileModel::create([
                         "post_id" => $post->id,
@@ -125,11 +125,11 @@ class NewPostForm extends Component
                     //Ko se objave posodobijo, se začasni url slike zamenja z sliko, ki jo naloži ta job.
 
                     //
-                    /*                     CheckFileMoved::dispatch(
+                    CheckFileMoved::dispatch(
                         $fileModel->id,
                         $post->id,
                         $file->getClientOriginalName()
-                    )->delay(now()->addSeconds(3)); */
+                    )->delay(now()->addSeconds(3));
                 }
             }
         }

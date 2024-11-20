@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Events\postCreated;
+use App\Livewire\NewPostForm;
 use App\Models\File as FileModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -31,8 +33,8 @@ class CheckFileMoved implements ShouldQueue
     //Zato je obdelan video posnetek že naložen v yeetMedia mapo
     public function handle(): void
     {
-        $maxAttempts = 5;
-        $delaySeconds = 3;
+        $maxAttempts = 10;
+        $delaySeconds = 1;
 
         $s3 = Storage::disk("s3");
         //to je glavna mapa z obdelanimi video posnetki in slikami
@@ -54,6 +56,7 @@ class CheckFileMoved implements ShouldQueue
                 $fileModel->url = $newUrl;
                 $fileModel->save();
             }
+            event(new postCreated($this->postId));
             //to samo ponavlja to funkcijo, v primeru če Lambda še ni končala
             //to se dogaja tolikokrat kot je vrednost $maxAttempts
             //$delaySeconds doda, koliko časa po tem, ko je bila poklicana dispatch funkcija, se izvede ta job

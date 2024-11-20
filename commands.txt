@@ -1,1 +1,12 @@
 https://laravel.com/docs/11.x/sail#introduction
+
+    queue-worker:
+        image: "sail-8.3/app"
+        container_name: laravel-queue
+        stop_signal: SIGTERM
+        depends_on:
+            - laravel.test
+        volumes:
+            - .:/var/www/html
+        networks:
+            - sail
