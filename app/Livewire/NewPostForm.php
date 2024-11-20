@@ -72,7 +72,7 @@ class NewPostForm extends Component
                 //yeetMedia je mapa v s3 bucketu
                 //id posta je pod-mapa v katero se shranjijo slike in videi
                 //getClientOriginalName() dobi originalno ime naložene datoteke (enako ime, kot je bilo ime datoteki, ki je bila naložena iz brskalnika)
-                if ($type === "image") {
+                if ($type == "image") {
                     $path = $file->storeAs(
                         "yeetMedia/" . $post->id,
                         $file->getClientOriginalName(),
@@ -93,7 +93,7 @@ class NewPostForm extends Component
                 //če naložimo video, potem gre malo drugače
                 //tokrat naloži datoteke v upload-original mapo v s3 bucketu
                 //ko je datoteka naložena tja, se avtomatično pokliče Lambda funkcija, ki ta video obdela, ga kopira v yeetMedia mapo na s3, ter ga izbriše iz upload-original mape
-                if ($type === "video") {
+                if ($type == "video") {
                     $path = $file->storeAs(
                         "upload-original/" . $post->id,
                         $file->getClientOriginalName(),
@@ -104,7 +104,7 @@ class NewPostForm extends Component
                     $url = Storage::disk("s3")->url($path);
                     // hmmm, ne uporabi novega naslova, zato mu ga pač ročno spremenimo.
                     // zdi se dobra ideja
-                    str_replace('upload-original', 'yeetMedia', $path);
+                    $url = str_replace('upload-original', 'yeetMedia', $url);
 
                     $fileModel = FileModel::create([
                         "post_id" => $post->id,
@@ -112,6 +112,9 @@ class NewPostForm extends Component
                         "type" => $type,
                     ]);
 
+                    //DEEMED COMPLETELY USELESS
+                    //LIKE, WHAT IS THIS
+                    //IT WORKS JUST FINE WI
                     //ok, to je še bolj zanimiv del.
                     //problem z mojo implementacijo je bil, da ko uporabnik naloži datoteko, brskalnik zamrzne dokler lambda ne obdela video posnetka
                     //to je rešeno z tem, da uporabimo Jobs, kar je Laravel funkcionalnost
@@ -120,11 +123,13 @@ class NewPostForm extends Component
                     //Vendar pa lahko to sliko iz temp mape tudi uporabimo zato, da jo prikažemo kot "placeholder" na novo narejenem postu
                     //Medtem pa se v ozadju izvede ta job.
                     //Ko se objave posodobijo, se začasni url slike zamenja z sliko, ki jo naloži ta job.
-                    CheckFileMoved::dispatch(
+
+                    //
+                    /*                     CheckFileMoved::dispatch(
                         $fileModel->id,
                         $post->id,
                         $file->getClientOriginalName()
-                    )->delay(now()->addSeconds(3));
+                    )->delay(now()->addSeconds(3)); */
                 }
             }
         }
