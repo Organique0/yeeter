@@ -15,6 +15,14 @@
                         <p class="font-extralight">
                             {{ $post->created_at->setTimezone('Europe/Ljubljana')->diffForHumans() }}
                         </p>
+
+                        @if ($post->user_id == auth()->id())
+                            <div class="ml-auto">
+                                <x-mary-button label="Delete"
+                                    class="bg-transparent border border-warning hover:bg-warning hover:text-warning-content h-1"
+                                    wire:click='deletePost({{ $post->id }})' />
+                            </div>
+                        @endif
                     </div>
 
                     <p class="mb-6">

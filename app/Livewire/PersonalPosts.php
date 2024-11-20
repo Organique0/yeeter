@@ -2,24 +2,19 @@
 
 namespace App\Livewire;
 
-use Illuminate\Contracts\View\View;
-use Livewire\Component;
 use App\Models\Post;
 use Livewire\Attributes\On;
+use Livewire\Component;
 
-class DisplayPosts extends Component
+class PersonalPosts extends Component
 {
-    protected $listeners = ['postCreated' => '$refreshPosts'];
     public $posts;
-    public $post_links = [];
-
     public function mount(): void
     {
         $this->refreshPosts();
     }
 
-    #[On('postCreated')]
-    #[On('PostDeleted')]
+    #[On('postDeleted')]
     public function refreshPosts(): void
     {
         $this->posts = Post::with(['files', 'user'])->orderByDesc('created_at')->get();
@@ -33,12 +28,13 @@ class DisplayPosts extends Component
             $post->delete();
         }
 
-        $this->refreshPosts();
+        $this->dispatch("postDeleted");
     }
 
-
-    public function render(): View
+    public function render()
     {
-        return view('livewire.display-posts', ['posts' => $this->posts]);
+        $user = auth()->user();
+        $posts = Post::where('user_id', $user->id)->get();
+        return view('livewire.display-posts', ['posts' => $posts]);
     }
 }
