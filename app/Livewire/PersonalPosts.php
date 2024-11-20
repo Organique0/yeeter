@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -22,13 +23,8 @@ class PersonalPosts extends Component
 
     public function deletePost($id)
     {
-        $post = Post::find($id);
-
-        if ($post && $post->user_id === auth()->id()) {
-            $post->delete();
-        }
-
-        $this->dispatch("postDeleted");
+        deletePostDirectory($id);
+        $this->refreshPosts();
     }
 
     public function render()
