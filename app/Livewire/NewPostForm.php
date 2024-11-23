@@ -12,6 +12,8 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Jobs\CheckFileMoved;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 
 class NewPostForm extends Component
 {
@@ -125,11 +127,14 @@ class NewPostForm extends Component
                     //Ko se objave posodobijo, se začasni url slike zamenja z sliko, ki jo naloži ta job.
 
                     //
+
+                    //tuakaj se še sproži artisan ukaz, ki zažene Fly.io worker
+                    Artisan::call('machine:start', ['id' => env('FLY_WORKER_ID')]);
                     CheckFileMoved::dispatch(
                         $fileModel->id,
                         $post->id,
                         $file->getClientOriginalName()
-                    )->delay(now()->addSeconds(3));
+                    )->delay(now()->addSeconds(4));
                 }
             }
         }

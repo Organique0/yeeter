@@ -34,7 +34,7 @@ class CheckFileMoved implements ShouldQueue
     public function handle(): void
     {
         $maxAttempts = 10;
-        $delaySeconds = 1;
+        $delaySeconds = 2;
 
         $s3 = Storage::disk("s3");
         //to je glavna mapa z obdelanimi video posnetki in slikami

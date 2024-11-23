@@ -18,6 +18,9 @@ console_command = 'php /var/www/html/artisan tinker'
   LOG_LEVEL = 'info'
   LOG_STDERR_FORMATTER = 'Monolog\Formatter\JsonFormatter'
   FILESYSTEM_DISK = 's3'
+  FLY_API_HOSTNAME='_api.internal:4280'
+  FLY_APP_NAME='yeeter-2024'
+  FLY_WORKER_ID='7843d19c45e538'
 
 [http_service]
   internal_port = 8080
