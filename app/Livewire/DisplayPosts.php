@@ -11,8 +11,6 @@ use Livewire\Attributes\On;
 class DisplayPosts extends Component
 {
     public $posts;
-    public $post_links = [];
-
     public function mount(): void
     {
         $this->refreshPosts();
@@ -28,7 +26,7 @@ class DisplayPosts extends Component
     public function deletePost($id)
     {
         deletePostDirectory($id);
-        $this->refreshPosts();
+        $this->dispatch("postDeleted");
     }
 
 
