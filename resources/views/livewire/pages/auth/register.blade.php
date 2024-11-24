@@ -14,6 +14,8 @@ layout('layouts.guest');
 
 state([
     'name' => '',
+    'surname' => '',
+    'username' => '',
     'email' => '',
     'password' => '',
     'password_confirmation' => '',
@@ -21,6 +23,8 @@ state([
 
 rules([
     'name' => ['required', 'string', 'max:255'],
+    'surname' => ['required', 'string', 'max:255'],
+    'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
     'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
     'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
 ]);
@@ -30,7 +34,9 @@ $register = function () {
 
     $validated['password'] = Hash::make($validated['password']);
 
-    event(new Registered(($user = User::create($validated))));
+    $user = User::create($validated);
+
+    event(new Registered($user));
 
     Auth::login($user);
 
@@ -46,6 +52,20 @@ $register = function () {
             <x-mary-input label="{{ __('Name') }}" wire:model="name" id="name" class="block mt-1 w-full"
                 type="text" name="name" required autofocus autocomplete="name" />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        </div>
+
+        <!-- Surname -->
+        <div class="mt-4">
+            <x-mary-input label="{{ __('Surname') }}" wire:model="surname" id="surname" class="block mt-1 w-full"
+                type="text" name="surname" required autofocus autocomplete="surname" />
+            <x-input-error :messages="$errors->get('surname')" class="mt-2" />
+        </div>
+
+        <!-- Username -->
+        <div class="mt-4">
+            <x-mary-input label="{{ __('Username') }}" wire:model="username" id="username" class="block mt-1 w-full"
+                type="text" name="username" required autofocus autocomplete="username" />
+            <x-input-error :messages="$errors->get('username')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
