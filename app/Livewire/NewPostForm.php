@@ -59,9 +59,9 @@ class NewPostForm extends Component
             if ($this->fileSystemDisk == 'public') {
 
                 if ($type === "image") {
-                    $path = $file->store('images', 'public');
+                    $path = $file->store('images/' . $post->id, 'public');
                 } else {
-                    $path = $file->store('videos', 'public');
+                    $path = $file->store('videos/' . $post->id, 'public');
                 }
 
                 FileModel::create([

@@ -64,20 +64,19 @@
                                                 // when you have 2 50% items, it takes more space than 100%
                                                 // So I just substract the gap from the width
                                             @endphp
-                                            <a href="{{ env('FILESYSTEM_DISK') == 'public' ? asset('storage/' . $file->url) : $file->url }}"
-                                                target="_blank" data-pswp-width="100" data-pswp-height="100"
+                                            <a href="{{ getAssetUrl($file->url) }}" target="_blank"
+                                                data-pswp-width="100" data-pswp-height="100"
                                                 class="relative flex items-center justify-center align-middle {{ $numFiles % 2 == 1 && $loop->last ? 'w-full' : 'w-[calc(50%-0.25rem)]' }}">
-                                                <img src="{{ env('FILESYSTEM_DISK') == 'public' ? asset('storage/' . $file->url) : $file->url }}"
+                                                <img src="{{ getAssetUrl($file->url) }}"
                                                     class="object-cover rounded-lg aspect-video"
                                                     onload="this.parentNode.setAttribute('data-pswp-width', this.naturalWidth); this.parentNode.setAttribute('data-pswp-height', this.naturalHeight)" />
                                             </a>
                                         @elseif ($file->type == 'video')
-                                            <a href="{{ env('FILESYSTEM_DISK') == 'public' ? asset('storage/' . $file->url) : $file->url }}"
-                                                target="_blank" data-pswp-width="100" data-pswp-height="100"
+                                            <a href="{{ getAssetUrl($file->url) }}" target="_blank"
+                                                data-pswp-width="100" data-pswp-height="100"
                                                 class="relative flex items-center justify-center align-middle {{ $numFiles % 2 == 1 && $loop->last ? 'w-full' : 'w-[calc(50%-0.25rem)]' }}">
-                                                <video
-                                                    src="{{ env('FILESYSTEM_DISK') == 'public' ? asset('storage/' . $file->url) : $file->url }}"
-                                                    controls class="object-cover rounded-lg"></video>
+                                                <video src="{{ getAssetUrl($file->url) }}" controls
+                                                    class="object-cover rounded-lg"></video>
                                             </a>
                                         @endif
                                     @endforeach

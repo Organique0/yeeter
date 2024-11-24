@@ -11,6 +11,18 @@ if (!function_exists('deletePostDirectory')) {
         if ($post && $post->user_id === auth()->id()) {
             $post->delete();
         }
-        Storage::disk('s3')->deleteDirectory("yeeter-storage/yeetMedia/{$id}");
+        if (env('FILESYSTEM_DISK') == 'public') {
+            Storage::disk('public')->deleteDirectory("images/{$id}");
+            Storage::disk('public')->deleteDirectory("videos/{$id}");
+        } else {
+            Storage::disk('s3')->deleteDirectory("yeeter-storage/yeetMedia/{$id}");
+        }
+    }
+}
+
+if (!function_exists('getAssetUrl')) {
+    function getAssetUrl($url)
+    {
+        return str_contains($url, 'cloudfront.net') ? $url : asset('storage/' . $url);
     }
 }

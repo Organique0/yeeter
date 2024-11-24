@@ -1,53 +1,3 @@
-<?php
-
-use App\Models\User;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Validation\Rule;
-
-use function Livewire\Volt\state;
-
-state([
-    'name' => fn() => auth()->user()->name,
-    'email' => fn() => auth()->user()->email,
-]);
-
-$updateProfileInformation = function () {
-    $user = Auth::user();
-
-    $validated = $this->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-    ]);
-
-    $user->fill($validated);
-
-    if ($user->isDirty('email')) {
-        $user->email_verified_at = null;
-    }
-
-    $user->save();
-
-    $this->dispatch('profile-updated', name: $user->name);
-};
-
-$sendVerification = function () {
-    $user = Auth::user();
-
-    if ($user->hasVerifiedEmail()) {
-        $this->redirectIntended(default: route('home', absolute: false));
-
-        return;
-    }
-
-    $user->sendEmailVerificationNotification();
-
-    Session::flash('status', 'verification-link-sent');
-};
-
-?>
-
 <section>
     <header>
         <h2 class="text-lg font-medium ">
@@ -60,6 +10,13 @@ $sendVerification = function () {
     </header>
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
+        <div>
+            <x-mary-file wire:model="file" accept="image/png, image/jpeg" crop-after-change :crop-config='$config'
+                change-text="{{ __('Change') }}" crop-text="{{ __('crop') }}" crop-title-text="{{ __('Crop Image') }}"
+                crop-cancel-text="{{ __('Cancel') }}" crop-save-text="{{ __('crop') }}">
+                <img src="{{ getAssetUrl($avatar) }}" class="h-40 rounded-full fill" />
+            </x-mary-file>
+        </div>
         <div>
             <x-mary-input label="{{ __('Name') }}" wire:model="name" id="name" name="name" type="text"
                 class="mt-1 block w-full" required autofocus autocomplete="name" />

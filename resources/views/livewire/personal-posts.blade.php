@@ -6,7 +6,7 @@
             <div
                 class="rounded-full  flex items-center
             align-middle justify-center m-auto w-20 md:w-28 lg:w-36">
-                <img class=" rounded-full object-cover" src="{{ $user->avatar }}">
+                <img class=" rounded-full object-cover" src="{{ getAssetUrl($user->avatar) }}">
             </div>
 
             <div class="">
