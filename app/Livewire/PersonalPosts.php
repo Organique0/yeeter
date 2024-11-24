@@ -3,34 +3,57 @@
 namespace App\Livewire;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Povils\Figlet\Figlet;
 
 class PersonalPosts extends Component
 {
+    public $username;
     public $posts;
-    public function mount(): void
+    public $user;
+
+    public $renderedFiglet;
+
+    public function generateFiglet($text)
     {
+        $figlet = new Figlet();
+        $x = $figlet
+            ->setFont('cyberlarge')
+            ->render($text);
+        $this->renderedFiglet = $x;
+    }
+
+    public function mount($username): void
+    {
+        $this->username = $username;
+        $this->user = User::where('username', $this->username)->firstOrFail();
+        $this->generateFiglet($this->user->username);
         $this->refreshPosts();
     }
 
-    #[On('postDeleted')]
+    #[On('postCreated')]
+    #[On('PostDeleted')]
     public function refreshPosts(): void
     {
-        $this->posts = Post::with(['files', 'user'])->orderByDesc('created_at')->get();
+        $this->posts = Post::whereHas('user', function ($query) {
+            $query->where('username', $this->user->username);
+        })
+            ->with(['files', 'user'])
+            ->orderByDesc('created_at')
+            ->get();
     }
 
     public function deletePost($id)
     {
         deletePostDirectory($id);
-        $this->refreshPosts();
+        $this->dispatch("postDeleted");
     }
 
     public function render()
     {
-        $user = auth()->user();
-        $posts = Post::where('user_id', $user->id)->get();
-        return view('livewire.display-posts', ['posts' => $posts]);
+        return view('livewire.personal-posts', ['posts' => $this->posts, 'figlet' => $this->renderedFiglet]);
     }
 }

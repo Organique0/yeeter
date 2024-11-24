@@ -16,6 +16,7 @@
         "league/flysystem-aws-s3-v3": "^3.0",
         "livewire/livewire": "^3.5",
         "livewire/volt": "^1.0",
+        "povils/figlet": "^0.1.0",
         "resend/resend-php": "^0.14.0",
         "robsontenorio/mary": "^1.41"
     },

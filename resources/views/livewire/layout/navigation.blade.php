@@ -1,7 +1,7 @@
 <?php
 
 use App\Livewire\Actions\Logout;
-
+use App\Models\User;
 $logout = function (Logout $logout) {
     $logout();
 
@@ -27,7 +27,7 @@ $logout = function (Logout $logout) {
                     <x-nav-link :href="route('home')" :active="request()->routeIs('home')" wire:navigate>
                         {{ __('Home') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('profile')" :active="request()->routeIs('profile')" wire:navigate>
+                    <x-nav-link :href="'/u/' . auth()->user()->username" wire:navigate>
                         {{ __('Profile') }}
                     </x-nav-link>
                 </div>
@@ -104,11 +104,6 @@ $logout = function (Logout $logout) {
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile')" wire:navigate>
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
                 <button wire:click="logout" class="w-full text-start">
                     <x-responsive-nav-link>
                         {{ __('Log Out') }}
