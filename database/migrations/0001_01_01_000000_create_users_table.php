@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('surname');
             $table->string('username')->unique();
-            $table->string('avatar')->nullable();
+            $table->string('avatar')->default('https://d1clanq8tcjyg0.cloudfront.net/default_profile.png');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

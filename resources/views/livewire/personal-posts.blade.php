@@ -2,21 +2,22 @@
 
 
     <div class="p-4 rounded-lg shadow-md mb-4">
-        <div class="items-center space-x-4">
-            {{--             <div class="rounded-full bg-primary w-32 h-32 flex items-center align-middle justify-center">
-                @if ($user->avatar)
-                    <img class="h-12 w-12 rounded-full object-cover" src="{{ $user->avatar }}">
-                @else
-                    <x-default-user class="" />
-                @endif
-            </div> --}}
+        <div class="items-center">
+            <div
+                class="rounded-full  flex items-center
+            align-middle justify-center m-auto w-20 md:w-28 lg:w-36">
+                <img class=" rounded-full object-cover" src="{{ $user->avatar }}">
+            </div>
 
-
-            <div>
+            <div class="">
                 <!--- DO NOT INDENT THE CONTENTS OF THIS!-->
-                <pre class="text-3xl text-secondary text-center">
+                <pre class="text-md md:text-xl lg:text-3xl text-secondary text-center">
 {{ $figlet }}
         </pre>
+                <p class="text-xl opacity-50">{{ '@' . $user->username }}</p>
+
+                <p class="text-xl opacity-50"><x-mary-icon name="c-calendar-days" /> Joined
+                    {{ $user->created_at->format('F Y') }}</p>
             </div>
 
 

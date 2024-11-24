@@ -30,7 +30,7 @@ class PersonalPosts extends Component
     {
         $this->username = $username;
         $this->user = User::where('username', $this->username)->firstOrFail();
-        $this->generateFiglet($this->user->username);
+        $this->generateFiglet($this->user->name);
         $this->refreshPosts();
     }
 

@@ -11,7 +11,7 @@
                         <p class="font-extrabold">
                             {{ $post->user->name }}
                             <a href="u/{{ $post->user->username }}" class="opacity-50">
-                                {{ $post->user->username }}
+                                {{ '@' . $post->user->username }}
                             </a>
                         <div class="px-1 text-2xl font-extrabold">·</div>
                         <p class="font-extralight">
