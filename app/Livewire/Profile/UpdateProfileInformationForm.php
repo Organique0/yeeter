@@ -16,11 +16,17 @@ class UpdateProfileInformationForm extends Component
     public $name;
     public $email;
     public $avatar;
-    public $file;
-    public mixed $fileSystemDisk;
+    public $banner;
+    public $tempBanner;
+    public $bio;
+    private mixed $fileSystemDisk;
+
+    public int $uuid = 12345;
+    public bool $cropperModal = false;
 
     //cropper config
     public $config = ['guides' => false, 'aspectRatio' => 1,  'viewMode' => 1, 'minCropBoxWidth' => 100, 'minCropBoxHeight' => 100];
+    //public $configBanner = ['guides' => false, 'aspectRatio' => 3,  'viewMode' => 1, 'minCropBoxWidth' => 300, 'minCropBoxHeight' =>  50, 'cropBoxResizable' => false];
     public function __construct()
     {
         $this->fileSystemDisk = env('FILESYSTEM_DISK');
@@ -33,50 +39,83 @@ class UpdateProfileInformationForm extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->avatar = $user->avatar;
+        $this->banner = $user->banner;
+        $this->bio = $user->bio;
     }
 
     public function updateProfileInformation()
     {
+
         $user = Auth::user();
 
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
-            'file' => ['nullable', 'image', 'max:10240'], // 10MB max
+            'avatar' => ['nullable', 'max:10240'], // 10MB max
+            'bio' => ['nullable', 'string', 'max:1000'],
+            //'banner' => ['nullable', 'image', 'max:10240'],
         ]);
 
-        if ($this->file) {
+        if ($this->avatar instanceof \Illuminate\Http\UploadedFile) {
+            $extension = $this->avatar->getClientOriginalExtension();
+            $filePath = null;
             if ($this->fileSystemDisk == 'public') {
-                $filePath = $this->file->store('avatars', 'public');
+                $filePath = $this->avatar->storeAs('avatars', $user->id . '.' . $extension, 'public');
 
                 // Delete old avatar if it exists
-                if ($user->file && Storage::disk('public')->exists($user->file)) {
-                    Storage::disk('public')->delete($user->file);
+                if ($user->avatar && Storage::disk('public')->exists('avatars/' . $user->id)) {
+                    Storage::disk('public')->delete('avatars/' . $user->id);
                 }
             } else if ($this->fileSystemDisk == 's3') {
-                $filePath = $this->file->storeAs('avatars', $user->id, 's3');
+                $filePath = $this->avatar->storeAs('avatars', $user->id . '.' . $extension, 's3');
                 $filePath = Storage::disk("s3")->url($filePath);
 
-                if ($user->file && Storage::disk('s3')->exists($user->file)) {
-                    Storage::disk('s3')->delete($user->file);
+                if ($user->avatar && Storage::disk('s3')->exists($filePath)) {
+                    Storage::disk('s3')->delete($filePath);
                 }
             }
 
             User::where('id', $user->id)->update(['avatar' => $filePath]);
 
-            $validated['file'] = $filePath;
-        }
+            $validated['avatar'] = $filePath;
+        };
 
-        // Update user
+        /*         if ($this->banner) {
+            $extension = $this->banner->getClientOriginalExtension();
+            $filePath = null;
+            if ($this->fileSystemDisk == 'public') {
+                $filePath = $this->banner->storeAs('banners', $user->id . '.' . $extension, 'public');
+
+                // Delete old avatar if it exists
+                if ($user->banner && Storage::disk('public')->exists('banners/' . $user->id)) {
+                    Storage::disk('public')->delete('banners/' . $user->id);
+                }
+            } else if ($this->fileSystemDisk == 's3') {
+                $filePath = $this->file->storeAs('banners', $user->id . '.' . $extension, 's3');
+                $filePath = Storage::disk("s3")->url($filePath);
+
+                if ($user->banner && Storage::disk('s3')->exists($filePath)) {
+                    Storage::disk('s3')->delete($filePath);
+                }
+            }
+
+            User::where('id', $user->id)->update(['banner' => $filePath]);
+
+            $validated['banner'] = $filePath;
+        } */
+
         $user->fill($validated);
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
         }
 
-        $user->save();
-
-        session()->flash('message', 'Profile updated successfully!');
+        if ($user->isDirty()) {
+            $user->save();
+            $this->dispatch('profile-updated');
+        } else {
+            $this->dispatch('profile-not-updated');
+        }
     }
 
     public function render()

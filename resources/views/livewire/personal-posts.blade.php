@@ -14,7 +14,8 @@
                 <pre class="text-md md:text-xl lg:text-3xl text-secondary text-center">
 {{ $figlet }}
         </pre>
-                <p class="text-xl opacity-50">{{ '@' . $user->username }}</p>
+                <p class="text-xl opacity-50 mb-2">{{ '@' . $user->username }}</p>
+                <p class="mb-2"> {!! nl2br(e($user->bio)) !!}</p>
 
                 <p class="text-xl opacity-50"><x-mary-icon name="c-calendar-days" /> Joined
                     {{ $user->created_at->format('F Y') }}</p>
