@@ -36,13 +36,13 @@
     </div>
 
     <div class="text-center h-[calc(100vh-3.5rem)]">
-        <div class="flex justify-center items-center h-[60%]">
-            <div class="w-[60%] md:w-[70%] lg:w-[80%] flex justify-center items-center stroke-inherit">
-                <x-application-logo-text />
+        <div class="justify-center items-center h-full pt-[10%]">
+            <div class="flex justify-center">
+                <div class="w-[60%] md:w-[70%] lg:w-full flex justify-center stroke-inherit">
+                    <x-application-logo-text />
+                </div>
             </div>
-        </div>
-        <div class="h-[30%] flex flex-col items-center justify-center">
-            <h1 class="text-7xl md:text-8xl lg:text-9xl">Yeeter</h1>
+            <h1 class="text-7xl md:text-8xl lg:text-9xl sm:mt-[0.5em] md:mt-[0.7em] lg:mt-[1em]">Yeeter</h1>
 
             <div>
                 <x-mary-button label="Yeet something on the internet"
