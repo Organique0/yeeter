@@ -9,34 +9,7 @@
     </header>
 
     <form wire:submit="updateProfileInformation" class="mt-6 space-y-6">
-        {{-- <div>
-            @if ($banner)
-                <x-mary-file wire:model="banner" accept="image/png, image/jpeg" crop-after-change :crop-config='$configBanner'
-                    change-text="{{ __('Change') }}" crop-text="{{ __('crop') }}"
-                    crop-title-text="{{ __('Crop Image') }}" crop-cancel-text="{{ __('Cancel') }}"
-                    crop-save-text="{{ __('crop') }}">
-                    <img src="{{ getAssetUrl($banner) }}" class="h-40 w-full object-cover" />
-                </x-mary-file>
-            @elseif ($tempBanner)
-
-                When use upload a banner, the $tempBanner url get a value immediately. So we can show a preview.
-                We cannot use $banner because you need to apply temporaryUrl function to get the url.
-                We diplay the first one, if there is a $banner but before we submit the form, we need to use
-                the temporaryUrl function to get the url. So we keep the $banner as null until we submit the form.
-                Then when the users refreshes the page, the $banner will load from database anyways.
-
-
-                <x-mary-file wire:model="banner" accept="image/png, image/jpeg" crop-after-change :crop-config='$config'
-                    change-text="{{ __('Change') }}" crop-text="{{ __('crop') }}"
-                    crop-title-text="{{ __('Crop Image') }}" crop-cancel-text="{{ __('Cancel') }}"
-                    crop-save-text="{{ __('crop') }}">
-                    <img src="{{ $tempBanner->temporaryUrl() }}" class="h-40 w-full object-cover" />
-                </x-mary-file>
-            @endif
-
-
-        </div> --}}
-        <div>
+        <div class="flex justify-center">
             <x-mary-file wire:model="avatar" accept="image/png, image/jpeg" crop-after-change :crop-config='$config'
                 change-text="{{ __('Change') }}" crop-text="{{ __('crop') }}" crop-title-text="{{ __('Crop Image') }}"
                 crop-cancel-text="{{ __('Cancel') }}" crop-save-text="{{ __('crop') }}">
@@ -87,4 +60,15 @@
             </x-action-message>
         </div>
     </form>
+
+
+    <div class="mt-12">
+        <pre class="text-md md:text-xl lg:text-3xl text-primary text-center" style="font-weight: 900">
+{{ $figlet }}
+        </pre>
+
+
+        <x-mary-select label="Select figlet font" :options="$fonts" wire:model.live="font" />
+    </div>
+
 </section>

@@ -7,7 +7,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Component;
-use Povils\Figlet\Figlet;
 
 class PersonalPosts extends Component
 {
@@ -17,20 +16,12 @@ class PersonalPosts extends Component
 
     public $renderedFiglet;
 
-    public function generateFiglet($text)
-    {
-        $figlet = new Figlet();
-        $x = $figlet
-            ->setFont('cyberlarge')
-            ->render($text);
-        $this->renderedFiglet = $x;
-    }
 
     public function mount($username): void
     {
         $this->username = $username;
         $this->user = User::where('username', $this->username)->firstOrFail();
-        $this->generateFiglet($this->user->name);
+        $this->renderedFiglet = generateFiglet($this->user->name, $this->user->font);
         $this->refreshPosts();
     }
 

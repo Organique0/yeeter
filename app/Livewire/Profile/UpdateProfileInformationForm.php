@@ -16,10 +16,36 @@ class UpdateProfileInformationForm extends Component
     public $name;
     public $email;
     public $avatar;
-    public $banner;
-    public $tempBanner;
     public $bio;
+    public $font;
     private mixed $fileSystemDisk;
+    public $figlet;
+    public $fonts = [
+        ['id' => 'cybermedium', 'name' => 'cybermedium'],
+        ['id' => 'larry3d', 'name' => 'larry3d'],
+        ['id' => '5lineoblique', 'name' => '5lineoblique'],
+        ['id' => 'alphabet', 'name' => 'alphabet'],
+        ['id' => 'avatar', 'name' => 'avatar'],
+        ['id' => 'banner', 'name' => 'banner'],
+        ['id' => 'banner3-D', 'name' => 'banner3-D'],
+        ['id' => 'barbwire', 'name' => 'barbwire'],
+        ['id' => 'nancyj-underlined', 'name' => 'nancyj-underlined'],
+        ['id' => 'nancyj', 'name' => 'nancyj'],
+        ['id' => 'block', 'name' => 'block'],
+        ['id' => 'ogre', 'name' => 'ogre'],
+        ['id' => 'pawp', 'name' => 'pawp'],
+        ['id' => 'chunky', 'name' => 'chunky'],
+        ['id' => 'pebbles', 'name' => 'pebbles'],
+        ['id' => 'computer', 'name' => 'computer'],
+        ['id' => 'puffy', 'name' => 'puffy'],
+        ['id' => 'rectangles', 'name' => 'rectangles'],
+        ['id' => 'crawford', 'name' => 'crawford'],
+        ['id' => 'rounded', 'name' => 'rounded'],
+        ['id' => 'rozzo', 'name' => 'rozzo'],
+        ['id' => 'sblood', 'name' => 'sblood'],
+        ['id' => 'doom', 'name' => 'doom'],
+        ['id' => 'graceful', 'name' => 'graceful']
+    ];
 
     public int $uuid = 12345;
     public bool $cropperModal = false;
@@ -32,6 +58,13 @@ class UpdateProfileInformationForm extends Component
         $this->fileSystemDisk = env('FILESYSTEM_DISK');
     }
 
+    public function updatedFont()
+    {
+        $user = Auth::user();
+        $user->update(['font' => $this->font]);
+        $this->figlet = generateFiglet($this->name, $this->font);
+    }
+
 
     public function mount()
     {
@@ -39,9 +72,11 @@ class UpdateProfileInformationForm extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->avatar = $user->avatar;
-        $this->banner = $user->banner;
+        $this->font = $user->font;
         $this->bio = $user->bio;
+        $this->figlet = generateFiglet($this->name, $this->font);
     }
+
 
     public function updateProfileInformation()
     {
@@ -79,30 +114,6 @@ class UpdateProfileInformationForm extends Component
 
             $validated['avatar'] = $filePath;
         };
-
-        /*         if ($this->banner) {
-            $extension = $this->banner->getClientOriginalExtension();
-            $filePath = null;
-            if ($this->fileSystemDisk == 'public') {
-                $filePath = $this->banner->storeAs('banners', $user->id . '.' . $extension, 'public');
-
-                // Delete old avatar if it exists
-                if ($user->banner && Storage::disk('public')->exists('banners/' . $user->id)) {
-                    Storage::disk('public')->delete('banners/' . $user->id);
-                }
-            } else if ($this->fileSystemDisk == 's3') {
-                $filePath = $this->file->storeAs('banners', $user->id . '.' . $extension, 's3');
-                $filePath = Storage::disk("s3")->url($filePath);
-
-                if ($user->banner && Storage::disk('s3')->exists($filePath)) {
-                    Storage::disk('s3')->delete($filePath);
-                }
-            }
-
-            User::where('id', $user->id)->update(['banner' => $filePath]);
-
-            $validated['banner'] = $filePath;
-        } */
 
         $user->fill($validated);
 
