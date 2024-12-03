@@ -8,6 +8,13 @@
                     class="cursor-text p-1 focus:outline-none min-h-11 empty:before:opacity-35 font-extrabold text-lg  empty:before:content-['Input\0020your\0020message\0020here']"
                     role="textbox" contenteditable spellcheck wire:ignore>
                 </div>
+                <x-mary-dropdown>
+                    <x-slot:trigger>
+                        <x-mary-button icon="o-face-smile" class="btn-sm btn-circle text-primary hover:bg-primary/15" />
+                    </x-slot:trigger>
+                    <emoji-picker></emoji-picker>
+                </x-mary-dropdown>
+                {{--                 <div id="grid"></div> --}}
 
                 @if ($files)
                     <!--
@@ -66,6 +73,7 @@ If I enter the data in it manually, it works fine.
 @push('scripts')
     <script>
         document.addEventListener('livewire:navigated', function() {
+
             const messageDiv = document.getElementById('message');
             //we add this to make tailwind empty: work
             messageDiv.innerText = "";
@@ -94,7 +102,11 @@ If I enter the data in it manually, it works fine.
                 if (message.innerText.trim() === '') {
                     messageDiv.innerText = "";
                 }
-            })
+            });
+
+            document.querySelector('emoji-picker')
+                .addEventListener('emoji-click', event => messageDiv.innerText += event.detail.unicode);
+
 
         });
     </script>
