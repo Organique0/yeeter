@@ -1,4 +1,18 @@
 import "./bootstrap";
+/* import { throttle } from "throttle-debounce";
+import { renderGrid } from "@giphy/js-components";
+import { GiphyFetch } from "@giphy/js-fetch-api";
+
+// create a GiphyFetch with your api key
+// apply for a new Web SDK key. Use a separate key for every platform (Android, iOS, Web)
+const gf = new GiphyFetch("ieB2gpZOCPD8KeYIUeokSX3wPBY8xNXz");
+// create a fetch gifs function that takes an offset
+// this will allow the grid to paginate as the user scrolls
+const fetchGifs = (offset) => gf.trending({ offset, limit: 5 });
+// render a grid
+const targetEl = document.getElementById("grid");
+renderGrid({ width: 800, fetchGifs }, targetEl); */
+
 //Source: https://github.com/saadeghi/theme-change
 function themeToggle() {
     var toggleEl = document.querySelector("[data-toggle-theme]");
