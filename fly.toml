@@ -35,4 +35,5 @@ console_command = 'php /var/www/html/artisan tinker'
     worker = "php artisan queue:work --stop-when-empty"
 
 [[vm]]
-  size = 'shared-cpu-1x'
+  size = 'shared-cpu-2x'
+  memory = 512
