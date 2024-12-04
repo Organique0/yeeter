@@ -26,7 +26,6 @@ class PersonalPosts extends Component
     }
 
     #[On('postCreated')]
-    #[On('postDeleted')]
     public function refreshPosts(): void
     {
         $this->posts = Post::whereHas('user', function ($query) {
@@ -40,7 +39,7 @@ class PersonalPosts extends Component
     public function deletePost($id)
     {
         deletePostDirectory($id);
-        $this->dispatch("postDeleted");
+        $this->refreshPosts();
     }
 
     public function render()
