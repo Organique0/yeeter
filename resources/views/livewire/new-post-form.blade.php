@@ -12,7 +12,7 @@
                     <x-slot:trigger>
                         <x-mary-button icon="o-face-smile" class="btn-sm btn-circle text-primary hover:bg-primary/15" />
                     </x-slot:trigger>
-                    <emoji-picker></emoji-picker>
+                    <emoji-picker wire:click.stop></emoji-picker>
                 </x-mary-dropdown>
                 {{--                 <div id="grid"></div> --}}
 
@@ -92,6 +92,9 @@ If I enter the data in it manually, it works fine.
                     // call the save method on the server
                     @this.
                     call('save');
+
+                    // clear the message div
+                    messageDiv.innerText = "";
                 });
             }
 
@@ -106,7 +109,21 @@ If I enter the data in it manually, it works fine.
 
             document.querySelector('emoji-picker')
                 .addEventListener('emoji-click', event => messageDiv.innerText += event.detail.unicode);
-
+            const style = document.createElement('style');
+            style.textContent = `
+                .pad-top  {
+                    opacity: 0;
+                }
+                .skintone-button-wrapper {
+                    display: none;
+                }
+                .search-row{
+                    padding-inline-end: var(--emoji-padding);
+                }
+            `;
+            const picker = document.querySelector('emoji-picker');
+            picker.onClick
+            picker.shadowRoot.appendChild(style);
 
         });
     </script>

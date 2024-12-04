@@ -18,3 +18,14 @@
     box-shadow: 0 0 0 1px #39f;
     outline: 0;
 }
+
+emoji-picker {
+    --background: oklch(var(--p) / 0.7);
+    --border-radius: 0.7rem;
+    --indicator-color: oklch(var(--pc));
+    --input-border-color: oklch(var(--pc));
+    --input-placeholder-color: oklch(var(--pc));
+    --border-color: oklch(var(--pc));
+    --button-hover-background: oklch(var(--pc) / 0.6);
+    --outline-color: oklch(var(--pc) / 0.6);
+}
