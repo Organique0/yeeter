@@ -11,7 +11,7 @@
 
             <div class="">
                 <!--- DO NOT INDENT THE CONTENTS OF THIS!-->
-                <pre class="text-md md:text-xl lg:text-3xl text-primary text-center" style="font-weight: 900">
+                <pre class="text-md md:text-xl lg:text-xl text-primary text-center" style="font-weight: 900">
 {{ $figlet }}
         </pre>
                 <p class="text-xl opacity-50 mb-2">{{ '@' . $user->username }}</p>

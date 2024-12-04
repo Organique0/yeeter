@@ -14,6 +14,8 @@ class UpdateProfileInformationForm extends Component
     use WithFileUploads;
 
     public $name;
+    public $surname;
+    public $username;
     public $email;
     public $avatar;
     public $bio;
@@ -74,6 +76,8 @@ class UpdateProfileInformationForm extends Component
         $this->avatar = $user->avatar;
         $this->font = $user->font;
         $this->bio = $user->bio;
+        $this->username = $user->username;
+        $this->surname = $user->surname;
         $this->figlet = generateFiglet($this->name, $this->font);
     }
 
@@ -88,6 +92,8 @@ class UpdateProfileInformationForm extends Component
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
             'avatar' => ['nullable', 'max:10240'], // 10MB max
             'bio' => ['nullable', 'string', 'max:1000'],
+            'surname' => ['nullable', 'string', 'max:255'],
+            'username' => ['nullable', 'string', 'max:255'],
             //'banner' => ['nullable', 'image', 'max:10240'],
         ]);
 
@@ -119,6 +125,10 @@ class UpdateProfileInformationForm extends Component
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
+        }
+
+        if ($user->isDirty('name')) {
+            $this->figlet = generateFiglet($this->name, $this->font);
         }
 
         if ($user->isDirty()) {

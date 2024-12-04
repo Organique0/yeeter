@@ -24,10 +24,18 @@
             <x-mary-input label="{{ __('Name') }}" wire:model="name" id="name" name="name" type="text"
                 class="mt-1 block w-full" required autofocus autocomplete="name" />
         </div>
+        <div>
+            <x-mary-input label="{{ __('Surname') }}" wire:model="surname" id="surname" name="surname" type="text"
+                class="mt-1 block w-full" required autofocus autocomplete="surname" />
+        </div>
+        <div>
+            <x-mary-input label="{{ __('Username') }}" wire:model="username" id="username" name="username"
+                type="text" class="mt-1 block w-full" required autofocus autocomplete="username" />
+        </div>
 
         <div>
             <x-mary-input label="{{ __('Email') }}" wire:model="email" id="email" name="email" type="email"
-                class="mt-1 block w-full" required autocomplete="username" />
+                class="mt-1 block w-full" required autocomplete="email" />
 
             @if (auth()->user() instanceof MustVerifyEmail && !auth()->user()->hasVerifiedEmail())
                 <div>
@@ -63,7 +71,7 @@
 
 
     <div class="mt-12">
-        <pre class="text-md md:text-xl lg:text-3xl text-primary text-center" style="font-weight: 900">
+        <pre class="text-md md:text-xl lg:text-xl text-primary text-center" style="font-weight: 900">
 {{ $figlet }}
         </pre>
 
