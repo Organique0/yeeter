@@ -8,12 +8,22 @@
                     class="cursor-text p-1 focus:outline-none min-h-11 empty:before:opacity-35 font-extrabold text-lg  empty:before:content-['Input\0020your\0020message\0020here']"
                     role="textbox" contenteditable spellcheck wire:ignore>
                 </div>
-                <x-mary-dropdown>
-                    <x-slot:trigger>
-                        <x-mary-button icon="o-face-smile" class="btn-sm btn-circle text-primary hover:bg-primary/15" />
-                    </x-slot:trigger>
-                    <emoji-picker wire:click.stop></emoji-picker>
-                </x-mary-dropdown>
+                <div class="flex gap-3 border-t pt-6 items-center">
+                    <x-mary-dropdown>
+                        <x-slot:trigger>
+                            <x-mary-button icon="o-face-smile"
+                                class="btn-sm btn-circle text-primary hover:bg-primary/15" />
+                        </x-slot:trigger>
+                        <emoji-picker wire:click.stop></emoji-picker>
+                    </x-mary-dropdown>
+
+
+                    <x-mary-button icon="o-photo" class="btn-sm btn-circle text-primary hover:bg-primary/15"
+                        @click="document.getElementById('file-input').click()" />
+
+                    <x-mary-button type="submit"
+                        class="btn-primary text-primary-content text-xl font-extrabold ml-auto">{{ __('Yeet') }}</x-mary-button>
+                </div>
                 {{--                 <div id="grid"></div> --}}
 
                 @if ($files)
@@ -52,14 +62,14 @@
 
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <x-mary-file wire:model="files" label="Upload an image or video" />
+                <input id="file-input" type="file" x-ref="file" @change="refreshImage()" class="hidden"
+                    wire:model="files">
                 @error('photo')
                     <span class="text-sm text-error">{{ $message }}</span>
                 @enderror
             </div>
 
-            <x-mary-button type="submit"
-                class="btn-primary text-primary-content text-xl font-extrabold">{{ __('Yeet') }}</x-mary-button>
+
         </div>
     </x-mary-form>
 </div>
