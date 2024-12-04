@@ -106,21 +106,19 @@ If I enter the data in it manually, it works fine.
                     // clear the message div
                     messageDiv.innerText = "";
                 });
-            }
+                //when you click ouside the div and there is no text inputed, set it to empty string
+                //this is because the browser randomly adds some content in a contenteditable div
+                //and this hidden things stay in the div and so breaking the empty: property
+                messageDiv.addEventListener('blur', function(event) {
+                    if (message.innerText.trim() === '') {
+                        messageDiv.innerText = "";
+                    }
+                });
 
-            //when you click ouside the div and there is no text inputed, set it to empty string
-            //this is because the browser randomly adds some content in a contenteditable div
-            //and this hidden things stay in the div and so breaking the empty: property
-            messageDiv.addEventListener('blur', function(event) {
-                if (message.innerText.trim() === '') {
-                    messageDiv.innerText = "";
-                }
-            });
-
-            document.querySelector('emoji-picker')
-                .addEventListener('emoji-click', event => messageDiv.innerText += event.detail.unicode);
-            const style = document.createElement('style');
-            style.textContent = `
+                document.querySelector('emoji-picker')
+                    .addEventListener('emoji-click', event => messageDiv.innerText += event.detail.unicode);
+                const style = document.createElement('style');
+                style.textContent = `
                 .pad-top  {
                     opacity: 0;
                 }
@@ -131,9 +129,14 @@ If I enter the data in it manually, it works fine.
                     padding-inline-end: var(--emoji-padding);
                 }
             `;
-            const picker = document.querySelector('emoji-picker');
-            picker.onClick
-            picker.shadowRoot.appendChild(style);
+                const picker = document.querySelector('emoji-picker');
+                picker.onClick
+                picker.shadowRoot.appendChild(style);
+            }
+
+
+
+
 
         });
     </script>
