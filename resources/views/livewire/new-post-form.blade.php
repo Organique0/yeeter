@@ -62,8 +62,7 @@
 
         <div class="flex items-center justify-between">
             <div class="flex items-center">
-                <input id="file-input" type="file" x-ref="file" @change="refreshImage()" class="hidden"
-                    wire:model="files">
+                <input id="file-input" type="file" x-ref="file" class="hidden" wire:model="files">
                 @error('photo')
                     <span class="text-sm text-error">{{ $message }}</span>
                 @enderror

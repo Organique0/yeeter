@@ -33,7 +33,7 @@ class CheckFileMoved implements ShouldQueue
     //Zato je obdelan video posnetek že naložen v yeetMedia mapo
     public function handle(): void
     {
-        $maxAttempts = 10;
+        $maxAttempts = 20;
         $delaySeconds = 2;
 
         $s3 = Storage::disk("s3");

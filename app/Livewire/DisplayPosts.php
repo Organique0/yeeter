@@ -17,7 +17,7 @@ class DisplayPosts extends Component
     }
 
     #[On('postCreated')]
-    #[On('PostDeleted')]
+    #[On('postDeleted')]
     public function refreshPosts(): void
     {
         $this->posts = Post::with(['files', 'user'])->orderByDesc('created_at')->get();

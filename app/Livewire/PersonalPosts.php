@@ -26,7 +26,7 @@ class PersonalPosts extends Component
     }
 
     #[On('postCreated')]
-    #[On('PostDeleted')]
+    #[On('postDeleted')]
     public function refreshPosts(): void
     {
         $this->posts = Post::whereHas('user', function ($query) {
