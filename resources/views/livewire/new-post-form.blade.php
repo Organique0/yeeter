@@ -85,11 +85,12 @@ If I enter the data in it manually, it works fine.
 
             const messageDiv = document.getElementById('message');
             //we add this to make tailwind empty: work
-            messageDiv.innerText = "";
+
 
             const form = document.getElementById('new-post-form');
 
             if (messageDiv && form) {
+                messageDiv.innerText = "";
                 form.addEventListener('submit', function(event) {
                     event.preventDefault();
 
