@@ -68,7 +68,7 @@ Requirements:
 - Installed and properly configured PHP and Composer
 
 For local testing it is very recommended to use Laravel Sail. That is why it exists.
-Otherwise you need to have things like laravel, postgresql and redis installed on your system.
+Otherwise you need to have things like laravel and MySql installed on your system.
 Documentation: https://laravel.com/docs/12.x/sail
 
 Everything is described in the documentation.
