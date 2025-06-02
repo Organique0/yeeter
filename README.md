@@ -22,6 +22,9 @@ Ukazi brez uporabe aliasa:
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
 
+Da lahko prikažemo slike, ki smo jih objavili:
+- ./vendor/bin/sail storage link
+
 Priprava podatkovne baze (Najlažje v enem novem oknu. Enega za drugim.):
 - ./vendor/bin/sail artisan migrate
 - ./vendor/bin/sail artisan db:seed
@@ -58,6 +61,9 @@ Commands you need to execute in separate terminal windows (in the root folder):
 - ./vendor/bin/sail npm install
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
+
+Command that allows us to display uploaded images on the website:
+- ./vendor/bin/sail storage link
 
 Database can be prepared using only 2 commands:
 - ./vendor/bin/sail artisan migrate
