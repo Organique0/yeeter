@@ -21,7 +21,6 @@ Ukazi brez uporabe aliasa:
 - ./vendor/bin/sail npm install
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
-- ./vendor/bin/sail reverb:start
 
 Priprava podatkovne baze (Najlažje v enem novem oknu. Enega za drugim.):
 - ./vendor/bin/sail artisan migrate
@@ -59,7 +58,6 @@ Commands you need to execute in separate terminal windows (in the root folder):
 - ./vendor/bin/sail npm install
 - ./vendor/bin/sail npm run dev
 - ./vendor/bin/sail queue:work
-- ./vendor/bin/sail reverb:start
 
 Database can be prepared using only 2 commands:
 - ./vendor/bin/sail artisan migrate
