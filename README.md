@@ -18,10 +18,15 @@ Za WSL2 je potrebno kopirati mapo projekta (yeeter) v nekaj takšnega (ime Linux
 Ta mapa se naredi ko omogočimo WSL2 v Windows nastavitvah. Potem je vidna v Raziskovalcu. 
 Ko končamo s kopiranjem, odpremo Windows Terminal aplikacijo in v tem odpremo WSL2 terminal. npr. Ubuntu terminal.
 zaženemo ukaze (rabimo namestiti Composer, ki potem namesti Laravel):
+
 sudo apt update
+
 sudo apt install php-cli unzip
+
 cd ~
+
 curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
+
 sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 
