@@ -7,11 +7,26 @@ Povzetek
 Zahtevano: 
 - MacOs, Linux ali WSL2.
 - Docker nameščen in zagnan (Linux ukaz za zagon Docker storitve: sudo systemctl start docker, Windows: Uporabi Docker Desktop)
-- nameščen in pravilno nastavljen PHP in Composer
+- nameščen in pravilno nastavljen PHP in Composer (Če uporabimo WSL2 potem mora biti to nameščeno tam.)
 
-!! Če Docker storitev ne dela na Linux, je verjetno potreben ukaz: docker context use default. !!
 
 Uporaba:
+
+WSL2
+
+Za WSL2 je potrebno kopirati mapo projekta (yeeter) v nekaj takšnega (ime Linux distribucije in uporabniško ime ni vedno isto): \\wsl.localhost\Ubuntu-24.04\home\<uporabniško_ime>.
+Ta mapa se naredi ko omogočimo WSL2 v Windows nastavitvah. Potem je vidna v Raziskovalcu. 
+Ko končamo s kopiranjem, odpremo Windows Terminal aplikacijo in v tem odpremo WSL2 terminal. npr. Ubuntu terminal.
+zaženemo ukaze (rabimo namestiti Composer, ki potem namesti Laravel):
+sudo apt update
+sudo apt install php-cli unzip
+cd ~
+curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php
+sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
+
+
+napišemo "ls" in preverimo če obstaja "yeeter" mapa. potem "cd yeeter" da gremo vanjo.
+
 (Terminal odprt v mapi projekta. Najlažje vsak ukaz v svojem oknu. Ni potrebno za vse, će veste za katere. Okna je najbolje imeti ves čas odprta. Zaradi izpisov in enostavne ustavitve)
 ./vendor/bin/sail je lahko dodan kot alias za lažjo uporabo v bash, fish ali zsh config: alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
 
