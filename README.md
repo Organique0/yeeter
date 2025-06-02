@@ -1,5 +1,5 @@
 Za localno testiranje je zelo priporočeno uporabiti Laravel Sail.
-Drugače je potrebno imeti Larael, Postgreql in Redis že nameščen.
+Drugače je potrebno imeti Laravel in MySql že nameščen.
 Dokumentacija: https://laravel.com/docs/12.x/sail
 
 Povzetek
